@@ -32,7 +32,9 @@ Create an import policy on demand and ask James for the `import-string` pointing
 
 Run the import policy and then restore the imported application and do a `data only restore`
 
-Once the deployment is scaled back up, you can access the world and should be standing upon a platform with a stairway in front of you leading up to another platform looking at a large VEEAM logo. The is a switch, if you right click on the switch (may take two presses) it will activate the dynamite and blow up the logo. 
+Once the deployment is scaled back up, you can access the world and should be standing upon a platform with a stairway in front of you leading up to another platform looking at a large VEEAM logo. The is a switch, if you right click on the switch (may take two presses) it will activate the dynamite and blow up the logo.
+
+I would recommend creating a local backup policy and pushing to an AWS/Azure bucket before you run the demo.
 
 # Recovery
 
