@@ -117,8 +117,7 @@ spec:
   - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-  - nodePort: 30283
-    port: 25565
+  - port: 25565
     protocol: TCP
     targetPort: 25565
   selector:
