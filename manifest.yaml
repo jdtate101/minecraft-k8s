@@ -71,9 +71,9 @@ spec:
             - name: TZ
               value: Europe/London
             - name: OPS
-              value: TBND,kamarov1973
+              value: {INPUT MC USER ID} # gives the user ops permissions on the server
             - name: WHITELIST
-              value: TBND,kamarov1973
+              value: {INPUT MC USER ID} # needed to access the server, for security
           image: itzg/minecraft-server:latest
           name: mc
           ports:
