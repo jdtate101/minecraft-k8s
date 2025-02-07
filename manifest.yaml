@@ -1,0 +1,129 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mc-claim0
+  name: mc-claim0
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+
+status: {}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mc
+  name: mc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mc
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/minecraft-server-default: "true"
+        io.kompose.service: mc
+    spec:
+      containers:
+        - env:
+            - name: ENABLE_COMMAND_BLOCK
+              value: "true"
+            - name: EULA
+              value: "TRUE"
+            - name: FORCE_GAMEMODE
+              value: "true"
+            - name: ICON
+              value: http://web.kodu.uk/veeam_logo.png
+            - name: LEVEL
+              value: Kasten
+            - name: MAX_TICK_TIME
+              value: "-1"
+            - name: MEMORY
+              value: 2G
+            - name: MODE
+              value: "1"
+            - name: MOTD
+              value: Veeam's Minecraft Demo for KubeCon 2025
+            - name: OVERRIDE_ICON
+              value: "true"
+            - name: PAUSE_WHEN_EMPTY_SECONDS
+              value: "0"
+            - name: PVP
+              value: "false"
+            - name: TZ
+              value: Europe/London
+            - name: OPS
+              value: TBND,kamarov1973
+            - name: WHITELIST
+              value: TBND,kamarov1973
+          image: itzg/minecraft-server:latest
+          name: mc
+          ports:
+            - containerPort: 25565
+              protocol: TCP
+          resources: {}
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /data
+              name: mc-claim0
+      restartPolicy: Always
+      volumes:
+        - name: mc-claim0
+          persistentVolumeClaim:
+            claimName: mc-claim0
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (a92241f79)
+  labels:
+    io.kompose.service: mc
+  name: gameserver
+  namespace: minecraft
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 172.30.18.22
+  clusterIPs:
+  - 172.30.18.22
+  externalIPs:
+  - 192.168.1.250
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 30283
+    port: 25565
+    protocol: TCP
+    targetPort: 25565
+  selector:
+    io.kompose.service: mc
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}
