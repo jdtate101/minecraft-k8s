@@ -25,7 +25,7 @@ Endpoint: https://s3.kodu.uk
 Access Key: (ask James)
 Secret Key: (ask James)
 Region: custom-other
-Bucket: openshift
+Bucket: demo
 ```
 
 Create an import policy on demand and ask James for the `import-string` pointing at the S3 bucket.
